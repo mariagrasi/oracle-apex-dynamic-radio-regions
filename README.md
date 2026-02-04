@@ -1,5 +1,7 @@
 # Oracle APEX – Dynamic Region Control with Radio Group
 
+<img width="1247" height="405" alt="image" src="https://github.com/user-attachments/assets/15a0a116-085a-4259-b459-f3900d7ff2b1" />
+
 This page demonstrates a **client-side, upgrade-safe pattern** for controlling the visibility of multiple regions in **Oracle APEX (24+)** using a **Radio Group**, **Dynamic Actions**, and **native APEX JavaScript APIs**.
 
 The solution is fully dynamic, scalable to multiple options, and avoids server-side processing or page reloads.
@@ -45,22 +47,17 @@ This naming convention enables a clean and scalable JavaScript implementation.
 **Action:** Execute JavaScript Code
 
 ```javascript
-// Reference the APEX Radio Group item
+// Reference the Radio Group APEX item
 var item = apex.item("P4_OPTION");
 
-// Retrieve all radio button options for the Radio Group
-var list_options = getRadioValues("P4_OPTION");
-
-// If no option is currently selected
+// If no option is selected, set the first radio option as default
 if (!item.getValue()) {
-
-  // Get the value of the first radio button option
-  var firstValue = list_options
+  var firstValue = item.element
+    .find("input[type=radio]")
     .first()
     .val();
 
-  // Set the first radio option as the default value
-  item.setValue(firstValue);
+  item.setValue(firstValue, true);
 }
 ```
 
@@ -143,6 +140,43 @@ Tested and validated on:
 * Always define **Static IDs** for regions
 * Keep the Radio Group values aligned with region IDs
 * Prefer Dynamic Actions over custom JavaScript events
+
+---
+
+## 📥 Importing the Page into Oracle APEX
+
+This repository includes an exported Oracle APEX page that can be imported into an existing application for validation and testing.
+
+### 🔹 Prerequisites
+
+* Oracle APEX **24.x or higher**
+* An existing APEX application (any schema)
+* Developer access to App Builder
+
+### 🔹 Steps to Import the Page
+
+1. Download the exported page file from this repository (e.g. `f210224_page_4.sql`).
+2. Log in to **Oracle APEX**.
+3. Open **App Builder** and select your target application.
+4. In the application home page, click **Create Page**.
+5. Choose **From a File**.
+6. Upload the exported page SQL file.
+7. Review the import summary and click **Install Page**.
+
+The page will be added to your application with all regions, items, and Dynamic Actions.
+
+---
+
+### 🔹 Post-Import Checklist
+
+After importing the page, verify the following:
+
+* The Radio Group item name is `P4_OPTION`
+* All regions have the correct **Static IDs** (`REG_1`, `REG_2`, `REG_3`, ...)
+* Dynamic Actions are enabled
+* JavaScript code is present in the Dynamic Actions
+
+Once validated, run the page and interact with the Radio Group to confirm the regions are displayed correctly.
 
 ---
 
